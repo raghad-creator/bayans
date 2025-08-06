@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bayan Salary - البنك العربي (ANB)</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+</head>
+<body>
+
+  <!-- تأكد من تسجيل الدخول قبل عرض الموقع -->
+  <script>
+    if (!localStorage.getItem('isLoggedIn') && window.location.pathname.endsWith('index.html')) {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <header class="header">
+    <!-- شعار التطبيق + Bayan Salary -->
+    <div class="logo-container">
+      <img src="app-logo.png" alt="شعار التطبيق" class="app-logo" />
+      <div class="title-container">
+        <span class="app-title">Bayan Salary</span>
+        <span class="by-anb">by <img src="logo-anb.png" alt="شعار البنك العربي الوطني" /></span>
+      </div>
+    </div>
+
+    <!-- القوائم في صف واحد -->
+    <nav class="nav">
+      <a href="#" onclick="showSection('home')" data-key="home"><i class="fas fa-home"></i> <span data-tr="home">الرئيسية</span></a>
+      <a href="#" onclick="showSection('account')" data-key="account"><i class="fas fa-file-invoice"></i> <span data-tr="account">كشف الحساب</span></a>
+      <a href="#" onclick="showSection('transfer')" data-key="transfer"><i class="fas fa-exchange-alt"></i> <span data-tr="transfer">التحويل</span></a>
+      <a href="#" onclick="showSection('salary')" data-key="salary"><i class="fas fa-calendar"></i> <span data-tr="salary">تتبع الراتب</span></a>
+      <a href="#" onclick="showSection('atm')" data-key="atm"><i class="fas fa-atm"></i> <span data-tr="atm">أقرب صراف</span></a>
+      <a href="#" onclick="showSection('support')" data-key="support"><i class="fas fa-headset"></i> <span data-tr="support">الدعم الفني</span></a>
+    </nav>
+
+    <!-- التحكم في اللغة والوضع -->
+    <div class="controls">
+      <select id="lang-select" class="btn-lang" onchange="changeLanguage(this.value)">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="hi">हिन्दी</option>
+        <option value="ur">اردو</option>
+        <option value="es">Español</option>
+      </select>
+      <button id="theme-toggle" class="btn-theme">الوضع الليلي</button>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- الصفحة الرئيسية -->
+    <section id="home" class="section active">
+      <h1><span data-tr="welcome">مرحباً بك في Bayan Salary</span> <button onclick="speak('welcome')" class="btn-speak"><i class="fas fa-volume-up"></i></button></h1>
+      <p class="desc"><span data-tr="desc">خدمة مقدمة من البنك العربي الوطني (ANB)</span> <button onclick="speak('desc')" class="btn-speak"><i class="fas fa-volume-up"></i></button></p>
+      <div class="services-grid">
+        <div class="service-card kasf" onclick="showSection('account')">
+          <i class="fas fa-file-invoice-dollar fa-2x"></i>
+          <h3><span data-tr="account">كشف الحساب</span></h3>
+          <p><span data-tr="account_desc">عرض رصيدك وتفاصيل المعاملات</span></p>
+          <button onclick="speak('account_desc')" class="btn-speak"><i class="fas fa-volume-up"></i></button>
+        </div>
+        <div class="service-card tahweel" onclick="openTransferForm()">
+          <i class="fas fa-exchange-alt fa-2x"></i>
+          <h3><span data-tr="transfer">التحويل</span></h3>
+          <p><span data-tr="transfer_desc">تحويل الأموال بسهولة وآمان</span></p>
+          <button onclick="speak('transfer_desc')" class="btn-speak"><i class="fas fa-volume-up"></i></button>
+        </div>
+        <div class="service-card ttab3" onclick="showSection('salary')">
+          <i class="fas fa-calendar-check fa-2x"></i>
+          <h3><span data-tr="salary">تتبع الراتب</span></h3>
+          <p><span data-tr="salary_desc">كم يوم بقي على الراتب؟</span></p>
+          <button onclick="speak('salary_desc')" class="btn-speak"><i class="fas fa-volume-up"></i></button>
+        </div>
+        <div class="service-card asraf" onclick="showSection('atm')">
+          <i class="fas fa-atm fa-2x"></i>
+          <h3><span data-tr="atm">أقرب صراف</span></h3>
+          <p><span data-tr="atm_desc">اعثر على أقرب صراف بنكي</span></p>
+          <button onclick="speak('atm_desc')" class="btn-speak"><i class="fas fa-volume-up"></i></button>
+        </div>
+        <div class="service-card dam" onclick="showSection('support')">
+          <i class="fas fa-life-ring fa-2x"></i>
+          <h3><span data-tr="support">الدعم الفني</span></h3>
+          <p><span data-tr="support_desc">لأي استفسار، نحن هنا</span></p>
+          <button onclick="speak('support_desc')" class="btn-speak"><i class="fas fa-volume-up"></i></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- كشف الحساب -->
+    <section id="account" class="section">
+      <button onclick="showSection('home')" class="btn-back"><i class="fas fa-arrow-right"></i> <span data-tr="back">عودة</span></button>
+      <h2><span data-tr="account">كشف الحساب</span> <button onclick="speak('account')" class="btn-speak"><i class="fas fa-volume-up"></i></button></h2>
+      <table class="table">
+        <tr>
+          <th><span data-tr="date">التاريخ</span></th>
+          <th><span data-tr="desc">الوصف</span></th>
+          <th><span data-tr="amount_col">المبلغ (ر.س)</span></th>
+        </tr>
+        <tr>
+          <td>27 يوليو 2025</td>
+          <td>
+            <i class="fas fa-building"></i> <span data-tr="salary_transfer">تحويل راتب</span>
+            <button onclick="speak('salary_transfer')" class="btn-speak-inline">🔊</button>
+          </td>
+          <td style="color: green;">+7,500</td>
+        </tr>
+        <tr>
+          <td>20 يوليو 2025</td>
+          <td>
+            <i class="fas fa-bolt"></i> <span data-tr="electricity_bill">فاتورة الكهرباء</span>
+            <button onclick="speak('electricity_bill')" class="btn-speak-inline">🔊</button>
+          </td>
+          <td style="color: red;">-1,200</td>
+        </tr>
+        <tr>
+          <td>15 يوليو 2025</td>
+          <td>
+            <i class="fas fa-tint"></i> <span data-tr="water_bill">فاتورة المياه</span>
+            <button onclick="speak('water_bill')" class="btn-speak-inline">🔊</button>
+          </td>
+          <td style="color: red;">-400</td>
+        </tr>
+        <tr>
+          <td>10 يوليو 2025</td>
+          <td>
+            <i class="fas fa-gas-pump"></i> <span data-tr="fuel_purchase">شراء بنزين</span>
+            <button onclick="speak('fuel_purchase')" class="btn-speak-inline">🔊</button>
+          </td>
+          <td style="color: red;">-500</td>
+        </tr>
+        <tr>
+          <td>5 يوليو 2025</td>
+          <td>
+            <i class="fas fa-utensils"></i> <span data-tr="restaurant_purchase">شراء من مطعم</span>
+            <button onclick="speak('restaurant_purchase')" class="btn-speak-inline">🔊</button>
+          </td>
+          <td style="color: red;">-300</td>
+        </tr>
+      </table>
+      <p><strong><span data-tr="balance">رصيد الحساب:</span></strong> <span style="font-size: 1.2rem; color: #003366;">15,000 ر.س</span></p>
+    </section>
+
+    <!-- التحويل -->
+    <section id="transfer" class="section">
+      <button onclick="showSection('home')" class="btn-back"><i class="fas fa-arrow-right"></i> <span data-tr="back">عودة</span></button>
+      <h2><span data-tr="transfer">اختر المستلم</span> <button onclick="speak('transfer')" class="btn-speak"><i class="fas fa-volume-up"></i></button></h2>
+      <div class="recipients-grid">
+        <div class="recipient-card" onclick="openTransferForm('سارة', 'sarah.jpg')">
+          <img src="sarah.jpg" alt="سارة" onerror="this.src='https://via.placeholder.com/60?text=سارة'">
+          <h3>سارة <button onclick="speak('sara')" class="btn-speak-inline">🔊</button></h3>
+          <p>حساب: 123456789</p>
+        </div>
+        <div class="recipient-card" onclick="openTransferForm('رغد', 'raghad.jpg')">
+          <img src="raghad.jpg" alt="رغد" onerror="this.src='https://via.placeholder.com/60?text=رغد'">
+          <h3>رغد <button onclick="speak('raghd')" class="btn-speak-inline">🔊</button></h3>
+          <p>حساب: 987654321</p>
+        </div>
+        <div class="recipient-card" onclick="openTransferForm('الجوهرة', 'jawhara.jpg')">
+          <img src="jawhara.jpg" alt="الجوهرة" onerror="this.src='https://via.placeholder.com/60?text=الجوهرة'">
+          <h3>الجوهرة <button onclick="speak('jawhara')" class="btn-speak-inline">🔊</button></h3>
+          <p>حساب: 555555555</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- نموذج التحويل -->
+    <section id="transfer-form" class="section" style="display: none;">
+      <button onclick="showSection('transfer')" class="btn-back"><i class="fas fa-arrow-right"></i> <span data-tr="back">عودة</span></button>
+      <h2><span data-tr="transfer_money">تحويل الأموال</span> <button onclick="speak('transfer_money')" class="btn-speak"><i class="fas fa-volume-up"></i></button></h2>
+      <p><strong><span data-tr="recipient">المستلم:</span></strong> <span id="recipient-name">...</span> <button onclick="speak('recipient')" class="btn-speak-inline">🔊</button></p>
+      <label><span data-tr="amount">المبلغ (ر.س):</span></label>
+      <input type="number" id="amount" value="1000" min="1" />
+      <button onclick="speak('amount')" class="btn-speak-inline">🔊</button>
+      <label><span data-tr="note">ملاحظة:</span></label>
+      <textarea id="note" placeholder="ملاحظة اختيارية"></textarea>
+      <button onclick="confirmTransfer()" class="btn-submit"><span data-tr="confirm">تأكيد التحويل</span></button>
+    </section>
+
+    <!-- تتبع الراتب -->
+    <section id="salary" class="section">
+      <button onclick="showSection('home')" class="btn-back"><i class="fas fa-arrow-right"></i> <span data-tr="back">عودة</span></button>
+      <h2><span data-tr="salary">تتبع الراتب</span> <button onclick="speak('salary')" class="btn-speak"><i class="fas fa-volume-up"></i></button></h2>
+      <p><span data-tr="salary_date">موعد نزول الراتب: <strong>27 أغسطس</strong></span></p>
+      <div class="countdown" id="countdown">جاري الحساب...</div>
+      <button onclick="updateCountdown()" class="btn-primary"><span data-tr="update">تحديث العد</span></button>
+    </section>
+
+    <!-- أقرب صراف -->
+    <section id="atm" class="section">
+      <button onclick="showSection('home')" class="btn-back"><i class="fas fa-arrow-right"></i> <span data-tr="back">عودة</span></button>
+      <h2><span data-tr="atm">أقرب صراف بنكي</span> <button onclick="speak('atm')" class="btn-speak"><i class="fas fa-volume-up"></i></button></h2>
+      <p><span data-tr="atm_desc2">نعرض لك أقرب فروع البنك العربي الوطني (ANB)</span></p>
+      <button onclick="findNearestATM()" class="btn-primary"><span data-tr="find_atm">ابحث عن أقرب صراف</span></button>
+      <div id="map" style="height: 300px; margin-top: 1rem;"></div>
+      <p style="margin-top: 1rem;">
+        <a href="https://maps.app.goo.gl/G6VtwN2Yj6pLTQm59" target="_blank" class="btn-map">
+          <i class="fas fa-map-marker-alt"></i> <span data-tr="open_map">افتح في Google Maps</span>
+        </a>
+      </p>
+    </section>
+
+    <!-- الدعم الفني -->
+    <section id="support" class="section">
+      <button onclick="showSection('home')" class="btn-back"><i class="fas fa-arrow-right"></i> <span data-tr="back">عودة</span></button>
+      <h2><span data-tr="support">الدعم الفني</span> <button onclick="speak('support')" class="btn-speak"><i class="fas fa-volume-up"></i></button></h2>
+      <p><span data-tr="support_desc2">لأي استفسار، تواصل معنا:</span></p>
+      <ul>
+        <li><i class="fas fa-phone"></i> <a href="tel:0551764832" class="phone-link"><span data-tr="phone">الهاتف: 0551764832</span></a></li>
+        <li><i class="fas fa-envelope"></i> <a href="mailto:raa7240@gmail.com"><span data-tr="email">البريد: raa7240@gmail.com</span></a></li>
+        <li><i class="fas fa-map-marker-alt"></i> <span data-tr="address">الرياض، شارع الملك فهد</span></li>
+      </ul>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
